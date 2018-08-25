@@ -1,10 +1,14 @@
-<?php
-include_once("connect.php");
-?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<title>ShoppingCart</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style type="text/css">
     body{background-color: #dbf3fa;}
     .card{margin-top: 20px;}
@@ -31,16 +35,16 @@ include_once("connect.php");
 <div class="container">
 	<div class="card" style="padding: 2%;">
   <h2>Create Account</h2>
-  <form method="POST">
+  <form method="POST" action="insert_data.php">
     <div class="form-group row">
       <label for="name" class="col-sm-2 col-form-label">Name</label>
       <div class="col-sm-10">
         <div class="form-row">
           <div class="col">
-            <input type="text" class="form-control" placeholder="firstname">
+            <input type="text" class="form-control" name="firstname" placeholder="Firstname">
           </div>
           <div class="col">
-            <input type="text" class="form-control" placeholder="lastname">
+            <input type="text" class="form-control" name="lastname" placeholder="Lastname">
           </div>
         </div>
       </div>
@@ -108,36 +112,3 @@ include_once("connect.php");
 </div>
 </body>
 </html>
-<?php
-
-if($_SERVER['REQUEST_METHOD']=='POST'){
-  $firstname = mysqli_real_escape_string($con,$_POST['firstname']);
-  $lastname = mysqli_real_escape_string($con,$_POST['lastname']);
-  $email = mysqli_real_escape_string($con,$_POST['email']);
-  $password = mysqli_real_escape_string($con,$_POST['password']);
-  $gender = mysqli_real_escape_string($con,$_POST['gender']);
-  $address = mysqli_real_escape_string($con,$_POST['address']);
-  $pincode = mysqli_real_escape_string($con,$_POST['pincode']);
-  $country = mysqli_real_escape_string($con,$_POST['country']);
-  $landmark = mysqli_real_escape_string($con,$_POST['landmark']);
-  $phone = mysqli_real_escape_string($con,$_POST['phone']);
-  $name = $firstname.' '.$lastname;
-  $sql = mysqli_query($con,"SELECT phone from users where phone='$phone'");
-  $row = mysqli_num_rows($sql);
-  if($row>0){
-    echo "<script type='text/javascript'>alert('Already Registered....')</script>";
-  }else{
-    $query = mysqli_query($con,"INSERT INTO users(name,email,password,gender,address,pincode,country,landmark,phone)
-      VALUES('$name','$email','$password','$gender','$address','$pincode','$country','$landmark','$phone')");
-    if($query){
-      $_SESSION['phone'] = $phone;
-      header("location:home.php");
-    }else{
-      die("Error".mysqli_error($con));
-    }
-  }
-
-}
-
-
-?>
